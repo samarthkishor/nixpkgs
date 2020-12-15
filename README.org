@@ -1,0 +1,26 @@
+Samarth's Nix, nix-darwin, and home-manager setup. Heavily inspired by [[lccambiaghi's setup][https://github.com/lccambiaghi/nixpkgs/blob/main/readme.org]].
+
+* Installation
+1. Install ~nix~ daemon
+2. Install ~nix-darwin~
+3. Remove the default ~~/.config/nixpkgs~ and ~git clone https://github.com/samarthkishor/nixpkgs~
+5. ~./update-dependencies.sh~
+6. ~./switch.sh~
+
+* nix-darwin
+Documentation: https://daiderd.com/nix-darwin/manual/index.html#sec-options
+** Rebuild switch
+#+BEGIN_SRC sh
+darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
+#+END_SRC
+** How does it work?
+- ~darwin/configuration.nix~ is the main entrypoint. It imports ~home-manager~ as module and its config from ~home-manager/configuration.
+* niv
+You add (and pin) channels in ~nix/sources.json~ using ~niv~ and then run ~./update-dependencies.sh~
+
+* What is included?
+- emacs
+- git
+- shell (zsh)
+- cli programs with ~home.packages~
+- some dotfiles

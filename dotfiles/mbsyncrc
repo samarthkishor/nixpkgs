@@ -1,0 +1,189 @@
+# Managed by Nix
+# From http://www.ict4g.net/adolfo/notes/2014/12/27/EmacsIMAP.html
+
+# ACCOUNT INFORMATION
+IMAPAccount gmail
+Host imap.gmail.com
+User samarthkishor1@gmail.com
+PassCmd "security find-generic-password -s mbsync-gmail-password -w"
+# UseIMAPS yes
+AuthMechs LOGIN
+# AuthMechs PLAIN
+SSLType IMAPS
+# SSLVersions SSLv3
+CertificateFile /usr/local/etc/openssl/cert.pem
+
+# THEN WE SPECIFY THE LOCAL AND REMOTE STORAGE
+# - THE REMOTE STORAGE IS WHERE WE GET THE MAIL FROM (E.G., THE
+#   SPECIFICATION OF AN IMAP ACCOUNT)
+# - THE LOCAL STORAGE IS WHERE WE STORE THE EMAIL ON OUR COMPUTER
+
+# REMOTE STORAGE (USE THE IMAP ACCOUNT SPECIFIED ABOVE)
+IMAPStore gmail-remote
+Account gmail
+
+# LOCAL STORAGE (CREATE DIRECTORIES with mkdir -p Maildir/gmail)
+MaildirStore gmail-local
+Path ~/Maildir/gmail/
+Inbox ~/Maildir/gmail/inbox
+
+# CONNECTIONS SPECIFY LINKS BETWEEN REMOTE AND LOCAL FOLDERS
+#
+# CONNECTIONS ARE SPECIFIED USING PATTERNS, WHICH MATCH REMOTE MAIl
+# FOLDERS. SOME COMMONLY USED PATTERS INCLUDE:
+#
+# 1 "*" TO MATCH EVERYTHING
+# 2 "!DIR" TO EXCLUDE "DIR"
+# 3 "DIR" TO MATCH DIR
+#
+# FOR INSTANCE IN THE SPECIFICATION BELOW:
+#
+# gmail-inbox gets the folder INBOX, ARCHIVE, and everything under "ARCHIVE*"
+# gmail-trash gets only the "[Gmail]/Trash" folder and stores it to the local "trash" folder
+
+Channel gmail-inbox
+Master :gmail-remote:
+Slave :gmail-local:
+Patterns "INBOX" "ARCHIVE"
+Create Both
+Expunge Both
+SyncState *
+
+Channel gmail-trash
+Master :gmail-remote:"[Gmail]/Trash"
+Slave :gmail-local:trash
+Create Both
+Expunge Both
+SyncState *
+
+Channel gmail-sent
+Master :gmail-remote:"[Gmail]/Sent Mail"
+Slave :gmail-local:sent
+Create Both
+Expunge Both
+SyncState *
+
+Channel gmail-all
+Master :gmail-remote:"[Gmail]/All Mail"
+Slave :gmail-local:"[Gmail].All Mail"
+Create Both
+Expunge Both
+SyncState *
+
+Channel gmail-starred
+Master :gmail-remote:"[Gmail]/Starred"
+Slave :gmail-local:"[Gmail].Starred"
+Create Both
+Expunge Both
+SyncState *
+
+# Channel gmail-newsletters
+# Master :gmail-remote:"[Gmail]/Newsletters"
+# Slave :gmail-local:"[Gmail].Newsletters"
+# Create Both
+# Expunge Both
+# SyncState *
+
+# # GROUPS PUT TOGETHER CHANNELS, SO THAT WE CAN INVOKE
+# MBSYNC ON A GROUP TO SYNC ALL CHANNELS
+#
+# FOR INSTANCE: "mbsync gmail" GETS MAIL FROM
+# "gmail-inbox", "gmail-sent", and "gmail-trash"
+#
+Group gmail
+Channel gmail-inbox
+Channel gmail-sent
+Channel gmail-trash
+Channel gmail-all
+Channel gmail-starred
+
+# ------------------
+
+# ACCOUNT INFORMATION
+IMAPAccount uva
+Host imap.gmail.com
+User sk4gz@virginia.edu
+PassCmd "security find-generic-password -s mbsync-uva-password -w"
+# UseIMAPS yes
+AuthMechs LOGIN
+# AuthMechs PLAIN
+SSLType IMAPS
+# SSLVersions SSLv3
+CertificateFile /usr/local/etc/openssl/cert.pem
+
+# THEN WE SPECIFY THE LOCAL AND REMOTE STORAGE
+# - THE REMOTE STORAGE IS WHERE WE GET THE MAIL FROM (E.G., THE
+#   SPECIFICATION OF AN IMAP ACCOUNT)
+# - THE LOCAL STORAGE IS WHERE WE STORE THE EMAIL ON OUR COMPUTER
+
+# REMOTE STORAGE (USE THE IMAP ACCOUNT SPECIFIED ABOVE)
+IMAPStore uva-remote
+Account uva
+
+# LOCAL STORAGE (CREATE DIRECTORIES with mkdir -p Maildir/uva)
+MaildirStore uva-local
+Path ~/Maildir/uva/
+Inbox ~/Maildir/uva/inbox
+
+# CONNECTIONS SPECIFY LINKS BETWEEN REMOTE AND LOCAL FOLDERS
+#
+# CONNECTIONS ARE SPECIFIED USING PATTERNS, WHICH MATCH REMOTE MAIl
+# FOLDERS. SOME COMMONLY USED PATTERS INCLUDE:
+#
+# 1 "*" TO MATCH EVERYTHING
+# 2 "!DIR" TO EXCLUDE "DIR"
+# 3 "DIR" TO MATCH DIR
+#
+# FOR INSTANCE IN THE SPECIFICATION BELOW:
+#
+# gmail-inbox gets the folder INBOX, ARCHIVE, and everything under "ARCHIVE*"
+# gmail-trash gets only the "[Gmail]/Trash" folder and stores it to the local "trash" folder
+
+Channel uva-inbox
+Master :uva-remote:
+Slave :uva-local:
+Patterns "INBOX" "ARCHIVE"
+Create Both
+Expunge Both
+SyncState *
+
+Channel uva-trash
+Master :uva-remote:"[Gmail]/Trash"
+Slave :uva-local:trash
+Create Both
+Expunge Both
+SyncState *
+
+Channel uva-sent
+Master :uva-remote:"[Gmail]/Sent Mail"
+Slave :uva-local:sent
+Create Both
+Expunge Both
+SyncState *
+
+Channel uva-all
+Master :uva-remote:"[Gmail]/All Mail"
+Slave :uva-local:"[Gmail].All Mail"
+Create Both
+Expunge Both
+SyncState *
+
+Channel uva-starred
+Master :uva-remote:"[Gmail]/Starred"
+Slave :uva-local:"[Gmail].Starred"
+Create Both
+Expunge Both
+SyncState *
+
+# # GROUPS PUT TOGETHER CHANNELS, SO THAT WE CAN INVOKE
+# MBSYNC ON A GROUP TO SYNC ALL CHANNELS
+#
+# FOR INSTANCE: "mbsync gmail" GETS MAIL FROM
+# "gmail-inbox", "gmail-sent", and "gmail-trash"
+#
+Group uva
+Channel uva-inbox
+Channel uva-sent
+Channel uva-trash
+Channel uva-all
+Channel uva-starred

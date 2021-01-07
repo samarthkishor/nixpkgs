@@ -5,8 +5,6 @@ let
   shellAliases = {
     # Aliases for commonly used tools
     grep = "grep --color=auto";
-    cat = "bat";
-    find = "fd";
     ll = "ls -lh";
     ls = "exa";
 

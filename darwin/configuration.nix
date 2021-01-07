@@ -41,8 +41,6 @@ with lib; {
   #   };
   # };
 
-  # nixpkgs.overlays = [ emacs-overlay ];
-
   nix.package = pkgs.nix;
   nix.trustedUsers = [ "root" "samarth" "@admin" ];
 
@@ -59,9 +57,6 @@ with lib; {
   # environment.shells = [ pkgs.zsh ];
   environment.darwinConfig =
     "${homeDir}/.config/nixpkgs/darwin/configuration.nix";
-
-  # TODO maybe after having extracted it? What are the benefits?
-  # environment.systemPackages = import ./packages.nix { inherit pkgs; }
 
   environment.systemPath = [
     "$HOME/.poetry/bin"

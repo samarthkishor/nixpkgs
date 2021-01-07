@@ -24,12 +24,13 @@ let
   nix-symlink-apps-macos = pkgs.writeShellScriptBin "nix-symlink-apps-macos" ''
     for app in $(find ~/Applications -name '*.app')
     do
-      if test -L $app && [[ $(readlink -f $app) == /nix/store/* ]]; then
+      if test -L $app && [[ $(greadlink -f $app) == /nix/store/* ]]; then
         rm $app
       fi
     done
-    for app in $(find ~/.nix-profile/Applications/ -name '*.app' -exec readlink -f '{}' \;)
+    for app in $(find ~/.nix-profile/Applications/ -name '*.app' -exec greadlink -f '{}' \;)
     do
+      echo "symlinking $(basename $app) into ~/Applications"
       ln -s $app ~/Applications/$(basename $app)
     done
   '';
@@ -59,10 +60,7 @@ let
   # };
 
 in {
-  imports = [
-    ./shells.nix
-    # ./emacs.nix
-  ];
+  imports = [ ./shells.nix ./emacs.nix ];
 
   home = {
     username = builtins.getEnv "USER";
@@ -80,9 +78,7 @@ in {
     sessionVariables = {
       EDITOR = "nvim";
       LIBRARY_PATH = "/usr/bin/gcc";
-      EMACS = "/Applications/Emacs.app/Contents/MacOS/Emacs";
       BROWSER = "firefox";
-      # TERMINAL = "alacritty";
     };
 
     ################
@@ -92,11 +88,6 @@ in {
     # Email
     file.".mbsyncrc".source = ../dotfiles/mbsyncrc;
     file.".msmtprc".source = ../dotfiles/msmtprc;
-
-    # file.".emacs.d" = {
-    #   source = "$HOME/.emacs.d";
-    #   recursive = true;
-    # };
   };
 
   fonts.fontconfig.enable = true;
@@ -202,7 +193,9 @@ in {
       bat # cat replacement written in Rust
       cachix # Nix binary cache
       cmake
+      coreutils # GNU CLI programs
       curl
+      gitAndTools.delta # Fancy diffs
       direnv # Per-directory environment variables
       exa # ls replacement written in Rust
       fd # find replacement written in Rust
@@ -243,5 +236,4 @@ in {
       nodejs # node and npm
       # customPython # Python3
     ] ++ scripts;
-
 }

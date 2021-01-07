@@ -15,27 +15,25 @@ with lib; {
 
   imports = [
     # Personal modules
-    ./modules/homebrew-bundle.nix
+    ./darwin/modules/homebrew-bundle.nix
 
     # import home-manager from niv
     "${(import <home-manager> { }).path}/nix-darwin"
 
-    # Other nix-darwin configurations
-    # ./brew.nix  # TODO fix HomeBrew config
-    ./defaults.nix
-  ]; # ++ lib.filter lib.pathExists [ ./private.nix ];
+    ./darwin/defaults.nix
+  ];
 
   #####################
   # Nix configuration #
   #####################
 
-  nixpkgs.config = import ../config.nix;
+  nixpkgs.config = import ./config.nix;
 
   nix.package = pkgs.nix;
   nix.trustedUsers = [ "root" "samarth" "@admin" ];
 
   environment.darwinConfig =
-    "${homeDir}/.config/nixpkgs/darwin/configuration.nix";
+    "${homeDir}/.config/nixpkgs/darwin-configuration.nix";
 
   environment.systemPath = [
     "$HOME/.poetry/bin"
@@ -58,7 +56,7 @@ with lib; {
   # home-manager #
   ################
 
-  home-manager.users.samarth = import ../home.nix;
+  home-manager.users.samarth = import ./home.nix;
 
   ########################
   # System configuration #

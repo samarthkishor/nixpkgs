@@ -31,30 +31,9 @@ with lib; {
 
   nixpkgs.config = import ../config.nix;
 
-  # TODO overlays to root
-  # nixpkgs.overlays = [ (import ./emacs-darwin.nix) ];
-
-  # nixpkgs.overlays = [ (import ../overlays) ];
-  # nixpkgs.config.packageOverrides = pkgs: {
-  #   nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-  #     inherit pkgs;
-  #   };
-  # };
-
   nix.package = pkgs.nix;
   nix.trustedUsers = [ "root" "samarth" "@admin" ];
 
-  # TODO
-  # nix.nixPath = [
-  #   "darwin-config=$HOME/src/nix/config/darwin.nix"
-  #   "home-manager=$HOME/src/nix/home-manager"
-  #   "darwin=$HOME/src/nix/darwin"
-  #   "nixpkgs=$HOME/src/nix/nixpkgs"
-  #   "ssh-config-file=$HOME/.ssh/config"
-  #   "ssh-auth-sock=${xdg_configHome}/gnupg/S.gpg-agent.ssh"
-  # ];
-
-  # environment.shells = [ pkgs.zsh ];
   environment.darwinConfig =
     "${homeDir}/.config/nixpkgs/darwin/configuration.nix";
 
@@ -79,7 +58,7 @@ with lib; {
   # home-manager #
   ################
 
-  home-manager.users.samarth = import ../home-manager/configuration.nix;
+  home-manager.users.samarth = import ../home.nix;
 
   ########################
   # System configuration #

@@ -2,19 +2,27 @@ Samarth's Nix, nix-darwin, and home-manager setup. Heavily inspired by [[https:/
 
 * Installation
 1. Install ~nix~ daemon
-2. Install ~nix-darwin~
+2. Install ~nix-darwin~ (if on macOS)
 3. Remove the default ~~/.config/nixpkgs~ and ~git clone https://github.com/samarthkishor/nixpkgs~
-5. ~./update-dependencies.sh~
-6. ~./switch.sh~
+4. Run =make darwin= if on macOS, otherwise run =make switch=
+
+* Usage
+
+If you modify any of the Darwin settings, run =make darwin= to reload the configuration.
+Sometimes you'll have to run the script =nix-symlink-apps-macos= if you change any Mac app settings and want the app launcher to point to the correct executable (like Emacs).
+
+If you modify any of the other Nix settings, run =make switch= to reload the configuration.
 
 * nix-darwin
 Documentation: https://daiderd.com/nix-darwin/manual/index.html#sec-options
 ** Rebuild switch
+
 #+BEGIN_SRC sh
 darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
 #+END_SRC
-** How does it work?
-- ~darwin/configuration.nix~ is the main entrypoint. It imports ~home-manager~ as a module and its configuration from ~home-manager/configuration~.
+
+This is aliased to =make darwin=
+
 * niv
 You add (and pin) channels in ~nix/sources.json~ using ~niv~ and then run ~./update-dependencies.sh~
 

@@ -62,7 +62,7 @@ let
   # };
 
 in {
-  imports = [ ./modules/shells.nix ./modules/emacs.nix ];
+  imports = [ ./modules/shells.nix ./modules/emacs.nix ./modules/kitty ];
 
   home = {
     username = builtins.getEnv "USER";

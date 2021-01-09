@@ -23,6 +23,10 @@ let
     # emacs
     emacsclient = "/Applications/Emacs.app/Contents/MacOS/bin/emacsclient";
     em = "emacsclient -n ";
+
+    # Themes
+    light = "kitty @ set-colors -a -c /Users/samarth/.config/nixpkgs/modules/kitty/Solarized_Light.conf";
+    dark = "kitty @ set-colors -a -c /Users/samarth/.config/nixpkgs/modules/kitty/Nord.conf";
   };
 in {
   programs.zsh = {

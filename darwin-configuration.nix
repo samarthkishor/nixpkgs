@@ -14,6 +14,7 @@ with lib; {
   #######################
 
   imports = [
+    ./modules/common.nix
     # Personal modules
     ./darwin/modules/homebrew-bundle.nix
 

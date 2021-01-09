@@ -23,6 +23,17 @@ in {
       (push '(menu-bar-lines . 0) default-frame-alist)
       (push '(tool-bar-lines . nil) default-frame-alist)
       (push '(vertical-scroll-bars . nil) default-frame-alist)
+
+      ;; Set up fonts early.
+      (set-face-attribute 'default
+                          nil
+                          :height 140
+                          :family "Iosevka"
+                          :weight 'normal)
+      (set-face-attribute 'variable-pitch
+                          nil
+                          :height 140
+                          :family "Iosevka Etoile")
     '';
 
     prelude = ''
@@ -109,7 +120,7 @@ in {
       doom-themes = {
         enable = true;
         config = ''
-          (load-theme 'doom-nord t)
+          (load-theme 'doom-solarized-light t)
         '';
       };
 

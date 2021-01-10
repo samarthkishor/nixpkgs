@@ -428,6 +428,8 @@ in {
                          'pcomplete-completions-at-point nil t)))
         ''];
         config = ''
+          (setq org-directory "~/Dropbox/org/")
+
           (defun tasks ()
             "Open main tasks file and start 'org-agenda' for this week."
             (interactive)
@@ -514,20 +516,20 @@ in {
         '';
       };
 
-      org-refile = {
-        enable = true;
-        after = [ "org" ];
-        config = ''
-          ;; Refiling should include not only the current org buffer but
-          ;; also the standard org files. Further, set up the refiling to
-          ;; be convenient with IDO. Follows norang's setup quite closely.
-          (setq org-refile-targets '((nil :maxlevel . 2)
-                                     (org-agenda-files :maxlevel . 2))
-                org-refile-use-outline-path t
-                org-outline-path-complete-in-steps nil
-                org-refile-allow-creating-parent-nodes 'confirm)
-        '';
-      };
+      # org-refile = {
+      #   enable = true;
+      #   after = [ "org" ];
+      #   config = ''
+      #     ;; Refiling should include not only the current org buffer but
+      #     ;; also the standard org files. Further, set up the refiling to
+      #     ;; be convenient with IDO. Follows norang's setup quite closely.
+      #     (setq org-refile-targets '((nil :maxlevel . 2)
+      #                                (org-agenda-files :maxlevel . 2))
+      #           org-refile-use-outline-path t
+      #           org-outline-path-complete-in-steps nil
+      #           org-refile-allow-creating-parent-nodes 'confirm)
+      #   '';
+      # };
 
       org-variable-pitch = {
         enable = false;

@@ -23,12 +23,15 @@ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuratio
 
 This is aliased to =make darwin=
 
-* niv
-You add (and pin) channels in ~nix/sources.json~ using ~niv~ and then run ~./update-dependencies.sh~
-
 * What is included?
 - emacs
 - git
 - shell (zsh)
+- terminal (kitty)
 - cli programs with ~home.packages~
 - some dotfiles
+* TODOs
+- This setup is not fully reproducible, I can either:
+  - Pin versions of package repositories via =niv=
+  - Switch to using flakes once I figure it out or once it becomes stable (preferred)
+- Better documentation and directory structure

@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
+  lightTheme = "Modus_Operandi";
+  darkTheme = "Modus_Vivendi";
   # Set all shell aliases programatically
   shellAliases = {
     # Aliases for commonly used tools
@@ -25,8 +27,10 @@ let
     em = "emacsclient -n ";
 
     # Themes
-    light = "kitty @ set-colors -a -c /Users/samarth/.config/nixpkgs/modules/kitty/Solarized_Light.conf";
-    dark = "kitty @ set-colors -a -c /Users/samarth/.config/nixpkgs/modules/kitty/Nord.conf";
+    light =
+      "kitty @ set-colors -a -c /Users/samarth/.config/nixpkgs/modules/kitty/${lightTheme}.conf";
+    dark =
+      "kitty @ set-colors -a -c /Users/samarth/.config/nixpkgs/modules/kitty/${darkTheme}.conf";
   };
 in {
   programs.zsh = {

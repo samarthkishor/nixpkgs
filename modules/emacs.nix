@@ -117,10 +117,32 @@ in {
         '';
       };
 
-      doom-themes = {
+      doom-themes = { enable = true; };
+
+      modus-operandi-theme = {
         enable = true;
         config = ''
-          (load-theme 'doom-solarized-light t)
+          (setq modus-operandi-theme-prompts 'intense)
+          (setq modus-operandi-theme-completions 'opinionated)
+          (setq modus-operandi-theme-org-blocks 'greyscale)
+          (setq modus-operandi-theme-scale-headings t)
+
+          (load-theme 'modus-operandi t)
+          ;; Without it tables becomes missaligned
+          (set-face-attribute 'button nil :inherit '(fixed-pitch))
+        '';
+      };
+
+      modus-vivendi-theme = {
+        enable = true;
+        config = ''
+          (setq modus-operandi-theme-prompts 'intense)
+          (setq modus-operandi-theme-completions 'opinionated)
+          (setq modus-operandi-theme-org-blocks 'greyscale)
+          (setq modus-operandi-theme-scale-headings t)
+
+          ;; Without it tables becomes missaligned
+          (set-face-attribute 'button nil :inherit '(fixed-pitch))
         '';
       };
 

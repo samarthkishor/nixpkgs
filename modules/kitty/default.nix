@@ -1,11 +1,11 @@
 { config, pkgs, ... }:
-let theme = builtins.readFile ./Solarized_Light.conf;
+let theme = builtins.readFile ./Modus_Operandi.conf;
 in {
   programs.kitty = {
     enable = true;
     font = {
       package = pkgs.jetbrains-mono;
-      name = "JetBrains Mono";
+      name = "Iosevka Term";
     };
     settings = {
       allow_remote_control = "yes";

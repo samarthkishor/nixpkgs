@@ -464,8 +464,10 @@ in {
         config = let
           fd = "${pkgs.fd}/bin/fd";
           fzf = "${pkgs.fzf}/bin/fzf";
+          rg = "${pkgs.ripgrep}/bin/rg";
         in ''
           (setq counsel-fzf-cmd "${fd} --type f | ${fzf} -f \"%s\"")
+          (setq counsel-rg-base-command (list "${rg}" "-M" "240" "--with-filename" "--no-heading" "--line-number" "--color" "never" "%s"))
         '';
       };
 

@@ -545,6 +545,11 @@ in {
         '';
       };
 
+      ox-hugo = {
+        enable = true;
+        after = [ "ox" ];
+      };
+
       org-agenda = {
         enable = true;
         after = [ "org" ];

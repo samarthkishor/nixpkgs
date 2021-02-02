@@ -488,7 +488,8 @@ in {
                (add-hook 'completion-at-point-functions
                          'pcomplete-completions-at-point nil t)))
         ''];
-        config = ''
+        config = let xelatex = "xelatex";
+        in ''
           (setq org-directory "~/Dropbox/org/")
 
           (defun tasks ()
@@ -532,12 +533,15 @@ in {
           (org-babel-do-load-languages 'org-babel-load-languages
                                        '((http . t)
                                          (shell . t)
-                                         (verb . t)))
+                                         (python . t)))
 
           ;; Unfortunately org-mode tends to take over keybindings that
           ;; start with C-c.
           (unbind-key "C-c SPC" org-mode-map)
           (unbind-key "C-c w" org-mode-map)
+
+          ;; Configure PDF exports
+          (setq org-latex-pdf-process '("${xelatex} -shell-escape %f" "biber %b" "${xelatex} -shell-escape %f" "${xelatex} -shell-escape %f"))
         '';
       };
 
@@ -874,22 +878,10 @@ in {
       #   enable = true;
       #   package = epkgs: epkgs.auctex;
       #   mode = [ ''("\\.tex\\'" . latex-mode)'' ];
-      #   hook = [
-      #     ''
-      #       (LaTeX-mode
-      #        . (lambda ()
-      #            (turn-on-reftex)       ; Hook up AUCTeX with RefTeX.
-      #            (auto-fill-mode)
-      #            (define-key LaTeX-mode-map [adiaeresis] "\\\"a")))
-      #     ''
-      #   ];
       #   config = ''
       #     (setq TeX-PDF-mode t
       #           TeX-auto-save t
-      #           TeX-parse-self t
-      #           TeX-output-view-style '(("^pdf$" "." "evince %o")
-      #                                   ( "^ps$" "." "evince %o")
-      #                                   ("^dvi$" "." "evince %o")))
+      #           TeX-parse-self t)
       #     ;; Add Glossaries command. See
       #     ;; http://tex.stackexchange.com/a/36914
       #     (eval-after-load "tex"
@@ -909,8 +901,7 @@ in {
         enable = true;
         defer = true;
         config = ''
-          (setq reftex-default-bibliography '("~/research/bibliographies/main.bib")
-                reftex-cite-format 'natbib
+          (setq reftex-cite-format 'natbib
                 reftex-plug-into-AUCTeX t)
         '';
       };

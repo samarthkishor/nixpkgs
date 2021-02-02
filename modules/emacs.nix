@@ -109,6 +109,17 @@ in {
         bind = { "C-x f" = "deadgrep"; };
       };
 
+      dired = {
+        enable = true;
+        command = [ "dired" "dired-jump" ];
+        config = ''
+          (put 'dired-find-alternate-file 'disabled nil)
+          ;; Use the system trash can.
+          (setq delete-by-moving-to-trash t)
+          (setq dired-listing-switches "-alvh --group-directories-first")
+        '';
+      };
+
       doom-modeline = {
         enable = true;
         hook = [ "(after-init . doom-modeline-mode)" ];
@@ -206,6 +217,19 @@ in {
             "-" 'org-ctrl-c-minus ; change bullet style
             "<" 'org-metaleft ; out-dent
             ">" 'org-metaright) ; indent
+          ;; Use Emacs state in these additional modes.
+          (dolist (mode '(ag-mode
+                          custom-mode
+                          custom-new-theme-mode
+                          dired-mode
+                          eshell-mode
+                          flycheck-error-list-mode
+                          git-rebase-mode
+                          org-capture-mode
+                          term-mode
+                          deadgrep-mode))
+            (add-to-list 'evil-emacs-state-modes mode))
+
           (evil-mode 1)
         '';
       };
@@ -283,6 +307,41 @@ in {
                 undo-tree-visualizer-timestamps t
                 undo-tree-enable-undo-in-region t)
           (global-undo-tree-mode)
+        '';
+      };
+
+      ibuffer = {
+        enable = true;
+        hook = [ "(ibuffer-mode-hook . hl-line-mode)" ];
+        bind = { "C-x C-b" = "ibuffer"; };
+        bindLocal = {
+          ibuffer-mode-map = {
+            "* f" = "ibuffer-mark-by-file-name-regexp";
+            "/ g" = "ibuffer-filter-by-content"; # "g" is for "grep"
+            "* g" = "ibuffer-mark-by-content-regexp";
+            "* n" = "ibuffer-mark-by-name-regexp";
+            "s n" = "ibuffer-do-sort-by-alphabetic";
+          };
+        };
+        config = ''
+          (setq ibuffer-expert t)
+          (setq ibuffer-display-summary nil)
+          (setq ibuffer-use-other-window nil)
+          (setq ibuffer-movement-cycle nil)
+          (setq ibuffer-default-sorting-mode 'filename/process)
+          (setq ibuffer-use-header-line t)
+          (setq ibuffer-default-shrink-to-minimum-size nil)
+          (setq ibuffer-formats
+            '((mark modified read-only locked " "
+                (name 30 30 :left :elide)
+                " "
+                (size 9 -1 :right)
+                " "
+                (mode 16 16 :left :elide)
+                " " filename-and-process)
+              (mark " "
+                (name 16 -1)
+                " " filename)))
         '';
       };
 
@@ -544,6 +603,27 @@ in {
 
       ## General Programming
 
+      company = {
+        enable = true;
+        diminish = [ "company-mode" ];
+        command = [ "company-mode" "company-doc-buffer" "global-company-mode" ];
+        defer = 1;
+        extraConfig = ''
+          :bind (:map company-mode-map
+                      ([remap completion-at-point] . company-complete-common)
+                      ([remap complete-symbol] . company-complete-common))
+        '';
+        config = ''
+          (setq company-idle-delay 0.3
+                company-show-numbers t
+                company-tooltip-maximum-width 100
+                company-tooltip-minimum-width 20
+                ; Allow me to keep typing even if company disapproves.
+                company-require-match nil)
+          (global-company-mode)
+        '';
+      };
+
       direnv = {
         enable = true;
         command = [ "direnv-mode" "direnv-update-environment" ];
@@ -732,8 +812,7 @@ in {
                 lsp-eldoc-render-all nil
                 lsp-headerline-breadcrumb-enable nil
                 lsp-modeline-code-actions-enable nil
-                lsp-modeline-diagnostics-enable nil
-                lsp-modeline-workspace-status-enable nil)
+                lsp-modeline-diagnostics-enable nil)
           (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
         '';
       };

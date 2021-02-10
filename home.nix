@@ -147,7 +147,7 @@ in {
       github.user = "samarthkishor";
 
       protocol.keybase.allow = "always";
-      credential.helper = "osxkeychain";
+      credential.helper = if pkgs.stdenv.isDarwin then "osxkeychain" else "";
       pull.rebase = "false";
     };
   };
@@ -195,6 +195,7 @@ in {
       lorri # Easy Nix shell
       libtool
       less
+      neovim # Better vim
       niv # Nix dependency management
       nixpkgs-fmt
       nodePackages.prettier
@@ -211,6 +212,7 @@ in {
       xsv # CSV file parsing utility
       yarn # Node.js package manager
       youtube-dl # Download videos
+      zsh # Better shell
 
       ## Programming Languages and related tools
       adoptopenjdk-bin # Java

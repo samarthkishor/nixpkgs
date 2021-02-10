@@ -198,7 +198,6 @@ in {
       niv # Nix dependency management
       nixpkgs-fmt
       nodePackages.prettier
-      pinentry_mac # Necessary for GPG
       procs
       protobuf # Protocol Buffers
       ripgrep # grep replacement written in Rust

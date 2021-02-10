@@ -88,6 +88,7 @@ in {
 
         (add-to-list 'find-file-not-found-functions #'with-buffer-name-prompt-and-make-subdirs)
 
+      ;; Remap keys
       (when (eq system-type 'darwin)
         (setq mac-option-modifier 'meta
           mac-command-modifier 'control

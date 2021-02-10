@@ -28,9 +28,9 @@ let
 
     # Themes
     light =
-      "kitty @ set-colors -a -c /Users/samarth/.config/nixpkgs/modules/kitty/${lightTheme}.conf";
+      "kitty @ set-colors -a -c $HOME/.config/nixpkgs/modules/kitty/${lightTheme}.conf";
     dark =
-      "kitty @ set-colors -a -c /Users/samarth/.config/nixpkgs/modules/kitty/${darkTheme}.conf";
+      "kitty @ set-colors -a -c $HOME/.config/nixpkgs/modules/kitty/${darkTheme}.conf";
   };
 in {
   programs.zsh = {
@@ -40,7 +40,7 @@ in {
     enableCompletion = true;
     history.extended = true;
     envExtra = ''
-      export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
+      # export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
       export PYENV_SHELL="zsh"
       # export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
     '';

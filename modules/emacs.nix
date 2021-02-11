@@ -915,6 +915,133 @@ in {
                 reftex-plug-into-AUCTeX t)
         '';
       };
+
+      ### Emacs applications
+
+      # mu4e for email
+      mu4e = {
+        enable = true;
+        command = [ "mu4e" ];
+        config = ''
+          ;; Load the library
+          (let ((mu4e-location
+                    (if (eq system-type 'darwin)
+                        "/usr/local/share/emacs/site-lisp/mu/mu4e"
+                        "/home/samarth/.nix-profile/share/emacs/site-lisp/mu4e/")))
+            (add-to-list 'load-path mu4e-location))
+          (require 'mu4e)
+
+          (setq mu4e-maildir (expand-file-name "~/Maildir"))
+          (setq mu4e-get-mail-command "${pkgs.isync}/bin/mbsync -a")
+          (setq mu4e-change-filenames-when-moving t) ;; fix for mbsync
+          ;; Enable inline images.
+          (setq mu4e-view-show-images t)
+          (setq mu4e-view-image-max-width 800)
+          ;; Use imagemagick, if available.
+          (when (fboundp 'imagemagick-register-types)
+            (imagemagick-register-types))
+
+          ;; Show email addresses as well as names.
+          (setq mu4e-view-show-addresses t)
+
+          ;; Open email in a browser if necessary.
+          (add-to-list 'mu4e-view-actions '("View in browser" . mu4e-action-view-in-browser) t)
+
+          ;; This hook correctly modifies the \Inbox and \Starred flags on email when they are marked to trigger the appropriate Gmail actions.
+          (add-hook 'mu4e-mark-execute-pre-hook
+            (lambda (mark msg)
+              (cond ((member mark '(refile trash)) (mu4e-action-retag-message msg "-\\Inbox"))
+                    ((equal mark 'flag) (mu4e-action-retag-message msg "\\Starred"))
+                    ((equal mark 'unflag) (mu4e-action-retag-message msg "-\\Starred")))))
+
+          ;; Helper functions
+          (defun mu4e-message-maildir-matches (msg rx)
+            "Determine which account context I am in based on the maildir subfolder"
+            (when rx
+                (if (listp rx)
+                    ;; If rx is a list, try each one for a match
+                    (or (mu4e-message-maildir-matches msg (car rx))
+                        (mu4e-message-maildir-matches msg (cdr rx)))
+                ;; Not a list, check rx
+                (string-match rx (mu4e-message-field msg :maildir)))))
+
+          (defun choose-msmtp-account ()
+            "Choose account label to feed msmtp -a option based on From header
+            in Message buffer; This function must be added to
+            message-send-mail-hook for on-the-fly change of From address before
+            sending message since message-send-mail-hook is processed right
+            before sending message."
+            (if (message-mail-p)
+                (save-excursion
+                    (let*
+                        ((from (save-restriction
+                                (message-narrow-to-headers)
+                                (message-fetch-field "from")))
+                        (account
+                        (cond
+                        ((string-match "samarthkishor1@gmail.com" from) "gmail")
+                        ((string-match "sk4gz@virginia.edu" from) "uva"))))
+                    (setq message-sendmail-extra-arguments (list '"-a" account))))))
+
+          ;; Use spellcheck when composing an email.
+          (add-hook 'mu4e-compose-mode-hook 'flyspell-mode)
+
+          ;; Define email contexts for my personal and school accounts.
+          (setq mu4e-contexts
+            `( ,(make-mu4e-context
+                :name "gmail"
+                :enter-func (lambda () (mu4e-message "Switch to the gmail context"))
+                :match-func (lambda (msg)
+                                (when msg
+                                (mu4e-message-maildir-matches msg "^/gmail")))
+                :leave-func (lambda () (mu4e-clear-caches))
+                :vars '((user-mail-address     . "samarthkishor1@gmail.com")
+                        (user-full-name        . "Samarth Kishor")
+                        (mu4e-sent-folder      . "/gmail/sent")
+                        (mu4e-drafts-folder    . "/gmail/drafts")
+                        (mu4e-trash-folder     . "/gmail/trash")
+                        (mu4e-refile-folder    . "/gmail/[Gmail].All Mail")))
+                ,(make-mu4e-context
+                :name "uva"
+                :enter-func (lambda () (mu4e-message "Switch to the UVA context"))
+                :match-func (lambda (msg)
+                                (when msg
+                                (mu4e-message-maildir-matches msg "^/uva")))
+                :leave-func (lambda () (mu4e-clear-caches))
+                :vars '((user-mail-address     . "sk4gz@virginia.edu")
+                        (user-full-name        . "Samarth Kishor")
+                        (mu4e-sent-folder      . "/uva/sent")
+                        (mu4e-drafts-folder    . "/uva/drafts")
+                        (mu4e-trash-folder     . "/uva/trash")
+                        (mu4e-refile-folder    . "/uva/[Gmail].All Mail")))))
+
+          ;; Gmail already sends sent mail to the Sent folder.
+          (setq mu4e-sent-messages-behavior 'delete)
+
+          ;; View and compose email in visual-line-mode for soft line wrapping.
+          (add-hook 'mu4e-view-mode-hook #'visual-line-mode)
+          (add-hook 'mu4e-compose-mode-hook #'visual-line-mode)
+
+          ;; Handle html emails and preserve links.
+          (setq mu4e-view-html-plaintext-ratio-heuristic most-positive-fixnum)
+
+          (require 'mu4e-contrib)
+          (setq mu4e-html2text-command 'mu4e-shr2text)
+          (add-hook 'mu4e-view-mode-hook
+                  (lambda()
+                      ;; try to emulate some of the eww key-bindings
+                      (local-set-key (kbd "<tab>") 'shr-next-link)
+                      (local-set-key (kbd "<backtab>") 'shr-previous-link)))
+
+          ;; Send mail with msmtp
+          (setq message-send-mail-function 'message-send-mail-with-sendmail)
+          (setq sendmail-program "${pkgs.msmtp}/bin/msmtp")
+          (setq user-full-name "Samarth Kishor")
+          ;; Tell msmtp to choose the SMTP server according to the "from" field in the outgoing email
+          (setq message-sendmail-envelope-from 'header)
+          (add-hook 'message-send-mail-hook 'choose-msmtp-account)
+        '';
+      };
     };
   };
 }

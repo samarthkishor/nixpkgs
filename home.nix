@@ -191,14 +191,20 @@ in {
       graphviz # dot
       gnupg # gpg
       httpie # Like curl but more user friendly
+      ispell # Spell checker
       jq # JSON parsing for the CLI
       lorri # Easy Nix shell
       libtool
       less
+      isync # Recieve emails
+      msmtp # Send emails
+      mu # Emacs mail client
       neovim # Better vim
       niv # Nix dependency management
       nixpkgs-fmt
       nodePackages.prettier
+      openssl
+      pass # Command line password manager
       procs
       protobuf # Protocol Buffers
       ripgrep # grep replacement written in Rust

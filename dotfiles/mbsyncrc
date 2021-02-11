@@ -5,13 +5,13 @@
 IMAPAccount gmail
 Host imap.gmail.com
 User samarthkishor1@gmail.com
-PassCmd "security find-generic-password -s mbsync-gmail-password -w"
+PassCmd "pass mbsync-gmail"
 # UseIMAPS yes
 AuthMechs LOGIN
 # AuthMechs PLAIN
 SSLType IMAPS
 # SSLVersions SSLv3
-CertificateFile /usr/local/etc/openssl/cert.pem
+# CertificateFile /usr/local/etc/openssl/cert.pem
 
 # THEN WE SPECIFY THE LOCAL AND REMOTE STORAGE
 # - THE REMOTE STORAGE IS WHERE WE GET THE MAIL FROM (E.G., THE
@@ -103,13 +103,13 @@ Channel gmail-starred
 IMAPAccount uva
 Host imap.gmail.com
 User sk4gz@virginia.edu
-PassCmd "security find-generic-password -s mbsync-uva-password -w"
+PassCmd "pass mbsync-uva"
 # UseIMAPS yes
 AuthMechs LOGIN
 # AuthMechs PLAIN
 SSLType IMAPS
 # SSLVersions SSLv3
-CertificateFile /usr/local/etc/openssl/cert.pem
+# CertificateFile /usr/local/etc/openssl/cert.pem
 
 # THEN WE SPECIFY THE LOCAL AND REMOTE STORAGE
 # - THE REMOTE STORAGE IS WHERE WE GET THE MAIL FROM (E.G., THE

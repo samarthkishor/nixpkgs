@@ -23,11 +23,52 @@ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuratio
 
 This is aliased to =make darwin=
 
+* Set up email
+
+Generate a GPG key
+
+#+begin_src sh
+gpg --gen-key
+#+end_src
+
+Initialize the password store
+
+#+begin_src sh
+pass init samarthkishor1@gmail.com
+#+end_src
+
+Add password for gmail
+
+#+begin_src sh
+pass insert mbsync-gmail
+#+end_src
+
+Add password for UVA email
+
+#+begin_src sh
+pass insert mbsync-uva
+#+end_src
+
+Make the Maildir directories
+
+#+begin_src sh
+mkdir ~/Maildir
+mkdir -p ~/Maildir/gmail
+mkdir -p ~/Maildir/uva
+#+end_src
+
+Fetch the email
+
+#+begin_src sh
+cd ~/Maildir && mbsync -a
+#+end_src
+
 * What is included?
 - emacs
 - git
 - shell (zsh)
 - terminal (kitty)
+- email (mbsync and mu4e)
 - cli programs with ~home.packages~
 - some dotfiles
 * TODOs

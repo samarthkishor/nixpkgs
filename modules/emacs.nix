@@ -856,6 +856,10 @@ in {
         '';
       };
 
+      lean-mode = {
+        enable = true;
+      };
+
       prolog = {
         hook = [ ''("\\.pl\\'" . prolog-mode)'' ];
         config = ''

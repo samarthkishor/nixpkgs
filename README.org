@@ -1,10 +1,11 @@
-Samarth's Nix, nix-darwin, and home-manager setup. Heavily inspired by [[https://github.com/lccambiaghi/nixpkgs/blob/main/readme.org][lccambiaghi's setup]].
+Samarth's NixOS, nix-darwin, and home-manager setup. Heavily inspired by [[https://github.com/lccambiaghi/nixpkgs/blob/main/readme.org][lccambiaghi's setup]].
 
 * Installation
-1. Install ~nix~ daemon
+1. Install the ~nix~ daemon if not on NixOS
 2. Install ~nix-darwin~ (if on macOS)
-3. Remove the default ~~/.config/nixpkgs~ and ~git clone https://github.com/samarthkishor/nixpkgs~
-4. Run =make darwin= if on macOS, otherwise run =make switch=
+3. Clone this repo into the =$HOME/.config= directory
+4. Run =make darwin= if on macOS, or run =make nixos= if on NixOS
+5. Run =make switch=
 
 * Usage
 
@@ -22,6 +23,18 @@ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuratio
 #+END_SRC
 
 This is aliased to =make darwin=
+
+* NixOS
+
+This configuration is specific to my hardware. Change the =hardware-configuration.nix= file if on a different machine.
+
+Rebuild the NixOS configuration with
+
+#+BEGIN_SRC sh
+NIX_PATH=${NIX_PATH}:nixos-config=${HOME}/.config/nixpkgs/nixos/configuration.nix sudo nixos-rebuild switch -I nixos-config=${HOME}/.config/nixpkgs/nixos/configuration.nix
+#+END_SRC
+
+This is aliased to =make nixos=
 
 * Set up email
 

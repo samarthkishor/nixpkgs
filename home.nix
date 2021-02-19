@@ -62,7 +62,7 @@ let
   # };
 
 in {
-  imports = [ ./modules/shells.nix ./modules/emacs.nix ./modules/kitty ];
+  imports = [ ./modules/shells.nix ./modules/emacs.nix ./modules/kitty ./modules/neovim.nix ];
 
   home = {
     username = builtins.getEnv "USER";
@@ -199,7 +199,6 @@ in {
       isync # Recieve emails
       msmtp # Send emails
       mu # Emacs mail client
-      neovim # Better vim
       niv # Nix dependency management
       nixpkgs-fmt
       nodePackages.prettier
@@ -225,8 +224,6 @@ in {
       clang # C/C++
       # gcc # C/C++
       nixfmt
-      nodejs # node and npm
-      # customPython # Python3
     ] ++ scripts;
 
   # Options that need to be set when using home-manager directly

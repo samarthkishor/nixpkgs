@@ -807,7 +807,10 @@ in {
         enable = true;
         command = [ "lsp" ];
         after = [ "company" "flycheck" ];
-        hook = [ "(lsp-mode . lsp-enable-which-key-integration)" ];
+        hook = [
+          "(lsp-mode . lsp-enable-which-key-integration)"
+          "(scala-mode . lsp)"
+        ];
         bindLocal = {
           lsp-mode-map = {
             "C-c r r" = "lsp-rename";
@@ -856,9 +859,7 @@ in {
         '';
       };
 
-      lean-mode = {
-        enable = true;
-      };
+      lean-mode = { enable = true; };
 
       prolog = {
         hook = [ ''("\\.pl\\'" . prolog-mode)'' ];
@@ -881,6 +882,30 @@ in {
       nix-mode = {
         enable = true;
         hook = [ "(nix-mode . subword-mode)" ];
+      };
+
+      scala-mode = {
+        enable = true;
+        config = ''(add-to-list 'interpreter-mode-alist '("scala" . scala-mode))'';
+      };
+
+      sbt-mode = {
+        enable = true;
+        config = ''
+          ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+          ;; allows using SPACE when in the minibuffer
+          (substitute-key-definition
+           'minibuffer-complete-word
+           'self-insert-command
+           minibuffer-local-completion-map)
+           ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+           (setq sbt:program-options '("-Dsbt.supershell=false"))
+        '';
+      };
+
+      lsp-metals = {
+        enable = true;
+        config = "(setq lsp-metals-treeview-show-when-views-received t)";
       };
 
       # Configure AUCTeX.

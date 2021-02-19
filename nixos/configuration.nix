@@ -104,9 +104,13 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     wget vim git gnumake # CLI programs needed to bootstrap nixpkgs config
+    # XFCE stuff
+    xfce.xfce4-whiskermenu-plugin
+    # General applications
     firefox
     thunderbird
     libreoffice
+    okular
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

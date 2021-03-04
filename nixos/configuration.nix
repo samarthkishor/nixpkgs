@@ -5,23 +5,22 @@
 { config, pkgs, ... }:
 
 # Swap ctrl and super keys to imitate macOS
-let layout = pkgs.writeText "xkb-layout" ''
-  remove control = Control_L
-  remove mod4 = Super_L Super_R
+let
+  layout = pkgs.writeText "xkb-layout" ''
+    remove control = Control_L
+    remove mod4 = Super_L Super_R
 
-  keysym Control_L = Super_L
-  keysym Super_L = Control_L
-  keysym Super_R = Control_L
+    keysym Control_L = Super_L
+    keysym Super_L = Control_L
+    keysym Super_R = Control_L
 
-  add control = Control_L Control_R
-  add mod4 = Super_L Super_R
-'';
-in
-{
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+    add control = Control_L Control_R
+    add mod4 = Super_L Super_R
+  '';
+in {
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Use the systemd-boot EFI boot loader.
   # boot.loader.systemd-boot.enable = true;
@@ -70,9 +69,7 @@ in
   # Enable the XFCE Desktop Environment.
   services.xserver = {
     enable = true;
-    desktopManager = {
-      xfce.enable = true;
-    };
+    desktopManager = { xfce.enable = true; };
     displayManager.defaultSession = "xfce";
   };
 
@@ -81,7 +78,8 @@ in
   services.xserver.xkbVariant = "colemak";
   services.xserver.xkbOptions = "eurosign:e, caps:escape";
   console.useXkbConfig = true;
-  services.xserver.displayManager.sessionCommands = "${pkgs.xorg.xmodmap}/bin/xmodmap ${layout}";
+  services.xserver.displayManager.sessionCommands =
+    "${pkgs.xorg.xmodmap}/bin/xmodmap ${layout}";
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;

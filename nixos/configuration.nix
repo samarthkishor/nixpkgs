@@ -91,9 +91,14 @@ in {
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  # Enable sound.
+  # Enable sound and bluetooth.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio = {
+    enable = true;
+    extraModules = [ pkgs.pulseaudio-modules-bt ];
+    package = pkgs.pulseaudioFull;
+  };
+  services.blueman.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -101,7 +106,6 @@ in {
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.samarth = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     extraGroups = [ "wheel" "docker" ]; # Enable ‘sudo’ and docker for the user.
     shell = pkgs.zsh;
   };
@@ -109,14 +113,26 @@ in {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget vim git gnumake # CLI programs needed to bootstrap nixpkgs config
+    # CLI programs needed to bootstrap nixpkgs config
+    wget
+    vim
+    git
+    gnumake
+    # Other CLI programs
+    gcalcli
     # XFCE stuff
     xfce.xfce4-whiskermenu-plugin
+    adementary-theme
+    elementary-xfce-icon-theme
     # General applications
     firefox
     thunderbird
     libreoffice
     okular
+    font-manager
+    # Non-free
+    zoom-us
+    spotify
   ];
 
   virtualisation.docker.enable = true;

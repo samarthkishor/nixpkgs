@@ -62,9 +62,16 @@ in {
   #   keyMap = "us";
   # };
 
-  fonts.fonts = with pkgs; [
-    iosevka
-  ];
+  fonts = {
+    fonts = with pkgs; [ iosevka inter ];
+    fontconfig = {
+      defaultFonts = {
+        monospace = [ "Iosevka" ];
+        sansSerif = [ "Inter" ];
+        serif = [ "DejaVu Serif" ];
+      };
+    };
+  };
 
   # Enable the XFCE Desktop Environment.
   services.xserver = {

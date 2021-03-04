@@ -121,6 +121,11 @@ in {
 
   # List services that you want to enable:
 
+  # Switch to red hue at night
+  services.redshift.enable = true;
+  location.latitude = 38.0293059;
+  location.longitude = -78.4766781;
+
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 

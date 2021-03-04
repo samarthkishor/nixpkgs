@@ -95,6 +95,7 @@ in {
   users.users.samarth = {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "docker" ]; # Enable ‘sudo’ and docker for the user.
     shell = pkgs.zsh;
   };
 
@@ -110,6 +111,8 @@ in {
     libreoffice
     okular
   ];
+
+  virtualisation.docker.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

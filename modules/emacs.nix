@@ -905,7 +905,6 @@ in {
 
       lsp-metals = {
         enable = true;
-        config = "(setq lsp-metals-treeview-show-when-views-received t)";
       };
 
       # Configure AUCTeX.

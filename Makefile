@@ -1,10 +1,7 @@
-.PHONY: darwin nixos switch
+.PHONY: laptop home
 
-darwin:
-	darwin-rebuild switch -I darwin-config=${HOME}/.config/nixpkgs/darwin/configuration.nix
+laptop: $(wildcard laptop/*)
+	NIX_PATH=${NIX_PATH}:nixos-config=${HOME}/.config/nixpkgs/laptop/nixos/configuration.nix sudo nixos-rebuild switch -I nixos-config=${HOME}/.config/nixpkgs/laptop/nixos/configuration.nix
 
-nixos:
-	NIX_PATH=${NIX_PATH}:nixos-config=${HOME}/.config/nixpkgs/nixos/configuration.nix sudo nixos-rebuild switch -I nixos-config=${HOME}/.config/nixpkgs/nixos/configuration.nix
-
-switch:
+home:
 	nix-shell --run "home-manager switch"

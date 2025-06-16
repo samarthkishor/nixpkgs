@@ -1,40 +1,34 @@
-Samarth's NixOS, nix-darwin, and home-manager setup. Heavily inspired by [[https://github.com/lccambiaghi/nixpkgs/blob/main/readme.org][lccambiaghi's setup]].
+Samarth's NixOS and nix-darwin (outdated) setup. Heavily inspired by [[https://github.com/lccambiaghi/nixpkgs/blob/main/readme.org][lccambiaghi's setup]].
 
 * Installation
 1. Install the ~nix~ daemon if not on NixOS
 2. Install ~nix-darwin~ (if on macOS)
 3. Clone this repo into the =$HOME/.config= directory
-4. Run =make darwin= if on macOS, or run =make nixos= if on NixOS
-5. Run =make switch=
 
-* Usage
+* Laptop (NixOS)
 
-If you modify any of the Darwin settings, run =make darwin= to reload the configuration.
-Sometimes you'll have to run the script =nix-symlink-apps-macos= if you change any Mac app settings and want the app launcher to point to the correct executable (like Emacs).
+This configuration is specific to my Framework 13 laptop. Change the =laptop/nixos/hardware-configuration.nix= file if on a different machine.
 
-If you modify any of the other Nix settings, run =make switch= to reload the configuration.
+Rebuild the NixOS configuration with
 
-* nix-darwin
+#+BEGIN_SRC sh
+NIX_PATH=${NIX_PATH}:nixos-config=${HOME}/.config/nixpkgs/laptop/nixos/configuration.nix sudo nixos-rebuild switch -I nixos-config=${HOME}/.config/nixpkgs/laptop/nixos/configuration.nix
+#+END_SRC
+
+This is aliased to =make laptop=.
+
+* nix-darwin (outdated)
 Documentation: https://daiderd.com/nix-darwin/manual/index.html#sec-options
-** Rebuild switch
+
+If you modify any of the Darwin settings, run the following command to reload the configuration.
 
 #+BEGIN_SRC sh
 darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
 #+END_SRC
 
-This is aliased to =make darwin=
+This is aliased to =make darwin=.
 
-* NixOS
-
-This configuration is specific to my hardware. Change the =hardware-configuration.nix= file if on a different machine.
-
-Rebuild the NixOS configuration with
-
-#+BEGIN_SRC sh
-NIX_PATH=${NIX_PATH}:nixos-config=${HOME}/.config/nixpkgs/nixos/configuration.nix sudo nixos-rebuild switch -I nixos-config=${HOME}/.config/nixpkgs/nixos/configuration.nix
-#+END_SRC
-
-This is aliased to =make nixos=
+Sometimes you'll have to run the script =nix-symlink-apps-macos= if you change any Mac app settings and want the app launcher to point to the correct executable (like Emacs).
 
 * Set up email
 
@@ -77,13 +71,12 @@ cd ~/Maildir && mbsync -a
 #+end_src
 
 * What is included?
-- emacs
 - git
 - shell (zsh)
-- terminal (kitty)
-- email (mbsync and mu4e)
+- email (mbsync)
 - cli programs with ~home.packages~
 - some dotfiles
+
 * TODOs
 - This setup is not fully reproducible, I can either:
   - Pin versions of package repositories via =niv=

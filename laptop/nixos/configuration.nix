@@ -140,11 +140,14 @@ in
         atool
         direnv
         emacs-pgtk
+        fd # faster find
         gh # Github CLI
         git
         gnumake
         ispell
+        nixfmt-rfc-style
         ripgrep
+        shellcheck
       ];
 
       programs.git = {

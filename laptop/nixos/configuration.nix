@@ -184,6 +184,8 @@ in
         };
       };
 
+      fonts.fontconfig.enable = true;
+
       home.stateVersion = "23.11"; # Don't change
     };
 
@@ -198,7 +200,9 @@ in
 
     fonts.packages = with pkgs; [
       noto-fonts
-      nerd-fonts.fira-code
+      noto-fonts-cjk-serif
+      fira-code
+      nerd-fonts.symbols-only
     ];
 
     # Some programs need SUID wrappers, can be configured further or are

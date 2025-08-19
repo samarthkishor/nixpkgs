@@ -35,6 +35,7 @@ in
 
   # Configure home-manager
   home-manager.users.samarth = import ../../modules/home-manager.nix;
+  home-manager.backupFileExtension = "backup";
 
   system.stateVersion = "25.05"; # DO NOT DELETE!
 }

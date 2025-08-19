@@ -1,7 +1,7 @@
-.PHONY: laptop home
+.PHONY: laptop desktop
 
 laptop: $(wildcard laptop/*)
-	NIX_PATH=${NIX_PATH}:nixos-config=${HOME}/.config/nixpkgs/laptop/nixos/configuration.nix sudo nixos-rebuild switch -I nixos-config=${HOME}/.config/nixpkgs/laptop/nixos/configuration.nix
+	NIX_PATH=${NIX_PATH}:nixos-config=${HOME}/.config/nixpkgs/hosts/laptop/configuration.nix sudo nixos-rebuild switch -I nixos-config=${HOME}/.config/nixpkgs/hosts/laptop/configuration.nix
 
-home:
-	nix-shell --run "home-manager switch"
+desktop: $(wildcard desktop/*)
+	NIX_PATH=${NIX_PATH}:nixos-config=${HOME}/.config/nixpkgs/hosts/desktop/configuration.nix sudo nixos-rebuild switch -I nixos-config=${HOME}/.config/nixpkgs/hosts/desktop/configuration.nix

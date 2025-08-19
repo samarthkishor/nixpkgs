@@ -1,43 +1,113 @@
-## This file contains the settings that are shared between Darwin and Linux systems
+## This file contains the settings that are shared between all hosts
 
 { inputs, config, lib, pkgs, ... }:
 
 let
   defaultUser = "samarth";
-  homePrefix = if pkgs.stdenv.isDarwin then "/Users" else "/home";
-  userShell = "zsh";
-in {
+in 
+{
   users.users = {
     "${defaultUser}" = {
+      isNormalUser = true;
       description = "Samarth Kishor";
-      home = "${homePrefix}/${defaultUser}";
-      shell = pkgs.${userShell};
+      extraGroups = [ "networkmanager" "wheel" ];
     };
   };
 
   nix = {
-    extraOptions = ''
-      keep-outputs = true
-      keep-derivations = true
-      ${lib.optionalString (config.nix.package == pkgs.nixFlakes)
-      "experimental-features = nix-command flakes"}
-    '';
-    trustedUsers = [ "${defaultUser}" "root" "@admin" "@wheel" ];
-    gc = {
-      automatic = true;
-      options = "--delete-older-than 30d";
+    settings.experimental-features = [ "nix-command" "flakes" ];
+  };
+
+  nixpkgs.config.allowUnfree = true;
+
+  # Packages
+  environment.systemPackages = with pkgs; [
+    neovim
+  ];
+
+  # Enable networking
+  networking.networkmanager.enable = true;
+
+  # Set your time zone.
+  time.timeZone = "America/New_York";
+
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_US.UTF-8";
+
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "en_US.UTF-8";
+    LC_IDENTIFICATION = "en_US.UTF-8";
+    LC_MEASUREMENT = "en_US.UTF-8";
+    LC_MONETARY = "en_US.UTF-8";
+    LC_NAME = "en_US.UTF-8";
+    LC_NUMERIC = "en_US.UTF-8";
+    LC_PAPER = "en_US.UTF-8";
+    LC_TELEPHONE = "en_US.UTF-8";
+    LC_TIME = "en_US.UTF-8";
+  };
+
+  services.xserver = {
+    enable = true;
+
+    xkb.layout = "us";
+    xkb.variant = "colemak";
+    xkb.options = "caps:escape";
+  };
+
+  # Enable firmware update manager
+  services.fwupd.enable = true;
+
+  # Enable CUPS to print documents.
+  services.printing.enable = true;
+
+  # Enable sound with pipewire.
+  services.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    #jack.enable = true;
+
+    # use the example session manager (no others are packaged yet so this is enabled by default,
+    # no need to redefine it in your config for now)
+    #media-session.enable = true;
+  };
+
+  # Keyboard customization: use some macOS shortcuts
+  # from https://github.com/canadaduane/meta-mac/blob/main/keyd/default.conf
+  services.keyd = {
+    enable = true;
+    keyboards = {
+      default = {
+        ids = [ "*" ];
+        settings = {
+          main = {
+            # Create new "cmd" button
+            leftalt = "layer(meta_mac)";
+            # Swap meta/alt
+            leftmeta = "leftalt";
+          };
+          "meta_mac:C" = {
+            shift = "layer(meta_mac_shift)";
+            left = "home";
+            right = "end";
+          };
+          "meta_mac_shift:C-S" = {
+            left = "S-home";
+            right = "S-end";
+          };
+        };
+      };
     };
-    buildCores = 8;
-    maxJobs = 8;
-    readOnlyStore = true;
-
-    binaryCaches = [ "https://cache.nixos.org" ];
-    binaryCachePublicKeys =
-      [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
   };
 
-  fonts = {
-    enableFontDir = true;
-    fonts = with pkgs; [ jetbrains-mono iosevka ];
-  };
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk-serif
+    fira-code
+    nerd-fonts.symbols-only
+  ];
 }

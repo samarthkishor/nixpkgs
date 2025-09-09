@@ -30,7 +30,10 @@ in
   # Configure host-only packages
   users.users.samarth.packages = with pkgs; [
     # Since this is XFCE, we need the regular gtk version of emacs
-    pkgs.emacs-gtk
+    emacs-gtk
+    # XFCE plugins
+    xfce.xfce4-xkb-plugin
+    xfce.xfce4-whiskermenu-plugin
   ];
 
   # Configure home-manager

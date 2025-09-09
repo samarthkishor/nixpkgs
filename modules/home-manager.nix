@@ -2,6 +2,15 @@
 
 {
   # Home Manager config
+
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Fluent";
+      package = pkgs.fluent-gtk-theme;
+    };
+  };
+
   programs.git = {
     enable = true;
     lfs.enable = true;

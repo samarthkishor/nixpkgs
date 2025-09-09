@@ -76,34 +76,6 @@ in
     #media-session.enable = true;
   };
 
-  # Keyboard customization: use some macOS shortcuts
-  # from https://github.com/canadaduane/meta-mac/blob/main/keyd/default.conf
-  services.keyd = {
-    enable = true;
-    keyboards = {
-      default = {
-        ids = [ "*" ];
-        settings = {
-          main = {
-            # Create new "cmd" button
-            leftalt = "layer(meta_mac)";
-            # Swap meta/alt
-            leftmeta = "leftalt";
-          };
-          "meta_mac:C" = {
-            shift = "layer(meta_mac_shift)";
-            left = "home";
-            right = "end";
-          };
-          "meta_mac_shift:C-S" = {
-            left = "S-home";
-            right = "S-end";
-          };
-        };
-      };
-    };
-  };
-
   fonts.packages = with pkgs; [
     noto-fonts
     noto-fonts-cjk-serif

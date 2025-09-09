@@ -40,5 +40,11 @@ in
   home-manager.users.samarth = import ../../modules/home-manager.nix;
   home-manager.backupFileExtension = "backup";
 
+  # Configure Steam
+  programs.java.enable = true;
+  programs.steam = {
+    enable = true;
+  };
+
   system.stateVersion = "25.05"; # DO NOT DELETE!
 }

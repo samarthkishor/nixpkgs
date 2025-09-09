@@ -48,6 +48,11 @@
     };
   };
 
+  programs.gh = {
+    enable = true;
+    gitCredentialHelper.enable = true;
+  };
+
   fonts.fontconfig.enable = true;
 
   home.stateVersion = "23.11"; # Don't delete

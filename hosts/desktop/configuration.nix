@@ -8,6 +8,7 @@ in
     (import "${home-manager}/nixos")
     ../../modules/common.nix
     ../../modules/packages.nix
+    ../../modules/tailscale.nix
     # Include the results of the hardware scan
     ./hardware-configuration.nix
   ];
@@ -17,13 +18,13 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixbox";
-  
+
   # Configure XFCE
   services.xserver.enable = true;
   services.xserver = {
     displayManager.lightdm.enable = true;
     desktopManager.xfce.enable = true;
- 
+
     # NOTE xkb options are in common.nix
   };
 
@@ -44,6 +45,14 @@ in
   programs.java.enable = true;
   programs.steam = {
     enable = true;
+  };
+
+  # Server stuff
+  services.immich = {
+    enable = true;
+    port = 2283;
+    host = "0.0.0.0";
+    openFirewall = true;
   };
 
   system.stateVersion = "25.05"; # DO NOT DELETE!

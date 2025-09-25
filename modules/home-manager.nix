@@ -1,6 +1,13 @@
 { config, pkgs, lib, ... }:
 
+let
+  agenix = builtins.fetchTarball https://github.com/ryantm/agenix/archive/main.tar.gz;
+in
 {
+  imports = [
+    (import "${agenix}/modules/age-home.nix")
+  ];
+
   # Home Manager config
 
   gtk = {

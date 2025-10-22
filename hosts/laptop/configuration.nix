@@ -2,160 +2,172 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
-  home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz;
-  nixos-hardware = builtins.fetchTarball https://github.com/NixOS/nixos-hardware/archive/master.tar.gz;
+  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz";
+  nixos-hardware = builtins.fetchTarball "https://github.com/NixOS/nixos-hardware/archive/master.tar.gz";
 in
 {
-  imports =
-    [
-      (import "${nixos-hardware}/framework/13-inch/11th-gen-intel")
-      (import "${home-manager}/nixos")
-      # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    (import "${nixos-hardware}/framework/13-inch/11th-gen-intel")
+    (import "${home-manager}/nixos")
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
-    nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
-    # Bootloader.
-    boot.loader.systemd-boot.enable = true;
-    boot.loader.efi.canTouchEfiVariables = true;
+  # Bootloader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
-    networking.hostName = "nixos"; # Define your hostname.
-    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.hostName = "nixos"; # Define your hostname.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-    # Configure network proxy if necessary
-    # networking.proxy.default = "http://user:password@proxy:port/";
-    # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-    # Enable networking
-    networking.networkmanager.enable = true;
+  # Enable networking
+  networking.networkmanager.enable = true;
 
-    # Set your time zone.
-    time.timeZone = "America/New_York";
+  # Set your time zone.
+  time.timeZone = "America/New_York";
 
-    # Select internationalisation properties.
-    i18n.defaultLocale = "en_US.UTF-8";
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_US.UTF-8";
 
-    i18n.extraLocaleSettings = {
-      LC_ADDRESS = "en_US.UTF-8";
-      LC_IDENTIFICATION = "en_US.UTF-8";
-      LC_MEASUREMENT = "en_US.UTF-8";
-      LC_MONETARY = "en_US.UTF-8";
-      LC_NAME = "en_US.UTF-8";
-      LC_NUMERIC = "en_US.UTF-8";
-      LC_PAPER = "en_US.UTF-8";
-      LC_TELEPHONE = "en_US.UTF-8";
-      LC_TIME = "en_US.UTF-8";
-    };
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "en_US.UTF-8";
+    LC_IDENTIFICATION = "en_US.UTF-8";
+    LC_MEASUREMENT = "en_US.UTF-8";
+    LC_MONETARY = "en_US.UTF-8";
+    LC_NAME = "en_US.UTF-8";
+    LC_NUMERIC = "en_US.UTF-8";
+    LC_PAPER = "en_US.UTF-8";
+    LC_TELEPHONE = "en_US.UTF-8";
+    LC_TIME = "en_US.UTF-8";
+  };
 
-    services.xserver = {
-      enable = true;
+  services.xserver = {
+    enable = true;
 
-      xkb.layout = "us";
-      xkb.variant = "colemak";
-      xkb.options = "caps:escape";
-    };
+    xkb.layout = "us";
+    xkb.variant = "colemak";
+    xkb.options = "caps:escape";
+  };
 
-    services.displayManager.sddm.enable = true;
-    services.displayManager.defaultSession = "plasma"; # use Wayland instead of X11
-    services.desktopManager.plasma6.enable = true;
+  services.displayManager.sddm.enable = true;
+  services.displayManager.defaultSession = "plasma"; # use Wayland instead of X11
+  services.desktopManager.plasma6.enable = true;
 
-    # Enable touchpad support (enabled default in most desktopManager).
-    services.libinput.enable = true;
+  # Enable touchpad support (enabled default in most desktopManager).
+  services.libinput.enable = true;
 
-    # Enable firmware update manager
-    services.fwupd.enable = true;
+  # Enable firmware update manager
+  services.fwupd.enable = true;
 
-    # Enable CUPS to print documents.
-    services.printing.enable = true;
+  # Enable CUPS to print documents.
+  services.printing.enable = true;
 
-    # Enable sound with pipewire.
-    services.pulseaudio.enable = false;
-    security.rtkit.enable = true;
-    services.pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-      # If you want to use JACK applications, uncomment this
-      #jack.enable = true;
+  # Enable sound with pipewire.
+  services.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    #jack.enable = true;
 
-      # use the example session manager (no others are packaged yet so this is enabled by default,
-      # no need to redefine it in your config for now)
-      #media-session.enable = true;
-    };
+    # use the example session manager (no others are packaged yet so this is enabled by default,
+    # no need to redefine it in your config for now)
+    #media-session.enable = true;
+  };
 
-    # Configure keyboard
-    services.keyd = {
-      enable = true;
-      keyboards = {
-        default = {
-          ids = ["*"];
-          extraConfig = ''
-# Mac-Like Configuration Example
-# Based off https://github.com/rvaiya/keyd/blob/master/examples/macos.conf
-#
-# Uses "Alt" button to the left of spacebar as "Cmd" key
-#
-[ids]
-*
+  # Configure keyboard
+  services.keyd = {
+    enable = true;
+    keyboards = {
+      default = {
+        ids = [ "*" ];
+        extraConfig = ''
+          # Mac-Like Configuration Example
+          # Based off https://github.com/rvaiya/keyd/blob/master/examples/macos.conf
+          #
+          # Uses "Alt" button to the left of spacebar as "Cmd" key
+          #
+          [ids]
+          *
 
-[main]
-# Create a new "Cmd" button, with various Mac OS-like features below
-leftmeta = layer(meta_mac)
+          [main]
+          # Create a new "Cmd" button, with various Mac OS-like features below
+          leftmeta = layer(meta_mac)
 
-# Swap ctrl/meta
-leftcontrol = leftmeta
+          # Swap ctrl/meta
+          leftcontrol = leftmeta
 
-# meta_mac modifier layer; inherits from 'Ctrl' modifier layer
-#
-# The main part! Using this layer, we can remap our new "Cmd" key to
-# do almost everything our muscle memory might need...
-[meta_mac:C]
-shift = layer(meta_mac_shift)
-# Move cursor to beginning of line
-left = home
-# Move cursor to end of Line
-right = end
-# Switch to next application
-tab = A-tab
+          # meta_mac modifier layer; inherits from 'Ctrl' modifier layer
+          #
+          # The main part! Using this layer, we can remap our new "Cmd" key to
+          # do almost everything our muscle memory might need...
+          [meta_mac:C]
+          shift = layer(meta_mac_shift)
+          # Move cursor to beginning of line
+          left = home
+          # Move cursor to end of Line
+          right = end
+          # Switch to next application
+          tab = A-tab
 
-[meta_mac_shift:C-S]
-# Highlight to beginning of line
-left = S-home
-# Highlight to end of Line
-right = S-end
-# Cmd-Shift-Tab switches to the previous application
-tab = A-S-tab
-          '';
-        };
+          [meta_mac_shift:C-S]
+          # Highlight to beginning of line
+          left = S-home
+          # Highlight to end of Line
+          right = S-end
+          # Cmd-Shift-Tab switches to the previous application
+          tab = A-S-tab
+        '';
       };
     };
+  };
 
-    # Optional, but makes sure that when you type the make palm rejection work with keyd
-    # https://github.com/rvaiya/keyd/issues/723
-    environment.etc."libinput/local-overrides.quirks".text = ''
-      [Serial Keyboards]
-      MatchUdevType=keyboard
-      MatchName=keyd virtual keyboard
-      AttrKeyboardIntegration=internal
-    '';
+  # Optional, but makes sure that when you type the make palm rejection work with keyd
+  # https://github.com/rvaiya/keyd/issues/723
+  environment.etc."libinput/local-overrides.quirks".text = ''
+    [Serial Keyboards]
+    MatchUdevType=keyboard
+    MatchName=keyd virtual keyboard
+    AttrKeyboardIntegration=internal
+  '';
 
-    # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.users.samarth = {
-      isNormalUser = true;
-      description = "Samarth Kishor";
-      extraGroups = [ "networkmanager" "wheel" ];
-      packages = with pkgs; [
-        firefox
-      ];
-    };
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.samarth = {
+    isNormalUser = true;
+    description = "Samarth Kishor";
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
+    packages = with pkgs; [
+      firefox
+    ];
+  };
 
-    # Home Manager config
-    home-manager.users.samarth = { pkgs, ... }: {
+  # Home Manager config
+  home-manager.users.samarth =
+    { pkgs, ... }:
+    {
       home.packages = with pkgs; [
         atool
         direnv
@@ -212,47 +224,47 @@ tab = A-S-tab
       home.stateVersion = "23.11"; # Don't change
     };
 
-    # Allow unfree packages
-    nixpkgs.config.allowUnfree = true;
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
 
-    # List packages installed in system profile. To search, run:
-    # $ nix search wget
-    environment.systemPackages = with pkgs; [
-      neovim
-    ];
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  environment.systemPackages = with pkgs; [
+    neovim
+  ];
 
-    fonts.packages = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk-serif
-      fira-code
-      nerd-fonts.symbols-only
-    ];
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk-serif
+    fira-code
+    nerd-fonts.symbols-only
+  ];
 
-    # Some programs need SUID wrappers, can be configured further or are
-    # started in user sessions.
-    # programs.mtr.enable = true;
-    # programs.gnupg.agent = {
-      #   enable = true;
-      #   enableSSHSupport = true;
-      # };
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  # };
 
-      # List services that you want to enable:
+  # List services that you want to enable:
 
-      # Enable the OpenSSH daemon.
-      # services.openssh.enable = true;
+  # Enable the OpenSSH daemon.
+  # services.openssh.enable = true;
 
-      # Open ports in the firewall.
-      # networking.firewall.allowedTCPPorts = [ ... ];
-      # networking.firewall.allowedUDPPorts = [ ... ];
-      # Or disable the firewall altogether.
-      # networking.firewall.enable = false;
+  # Open ports in the firewall.
+  # networking.firewall.allowedTCPPorts = [ ... ];
+  # networking.firewall.allowedUDPPorts = [ ... ];
+  # Or disable the firewall altogether.
+  # networking.firewall.enable = false;
 
-      # This value determines the NixOS release from which the default
-      # settings for stateful data, like file locations and database versions
-      # on your system were taken. It‘s perfectly fine and recommended to leave
-      # this value at the release version of the first install of this system.
-      # Before changing this value read the documentation for this option
-      # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-      system.stateVersion = "23.11"; # Did you read the comment?
+  # This value determines the NixOS release from which the default
+  # settings for stateful data, like file locations and database versions
+  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # this value at the release version of the first install of this system.
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateVersion = "23.11"; # Did you read the comment?
 
 }

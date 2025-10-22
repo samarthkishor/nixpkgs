@@ -1,7 +1,12 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
-  home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz;
+  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz";
 in
 {
   imports = [
@@ -33,43 +38,43 @@ in
     enable = true;
     keyboards = {
       default = {
-        ids = ["*"];
+        ids = [ "*" ];
         extraConfig = ''
-# Mac-Like Configuration Example
-# Based off https://github.com/rvaiya/keyd/blob/master/examples/macos.conf
-#
-# Uses "Alt" button to the left of spacebar as "Cmd" key
-#
-[ids]
-*
+          # Mac-Like Configuration Example
+          # Based off https://github.com/rvaiya/keyd/blob/master/examples/macos.conf
+          #
+          # Uses "Alt" button to the left of spacebar as "Cmd" key
+          #
+          [ids]
+          *
 
-[main]
-# Create a new "Cmd" button, with various Mac OS-like features below
-leftmeta = layer(meta_mac)
+          [main]
+          # Create a new "Cmd" button, with various Mac OS-like features below
+          leftmeta = layer(meta_mac)
 
-# Swap ctrl/meta
-leftcontrol = leftmeta
+          # Swap ctrl/meta
+          leftcontrol = leftmeta
 
-# meta_mac modifier layer; inherits from 'Ctrl' modifier layer
-#
-# The main part! Using this layer, we can remap our new "Cmd" key to
-# do almost everything our muscle memory might need...
-[meta_mac:C]
-shift = layer(meta_mac_shift)
-# Move cursor to beginning of line
-left = home
-# Move cursor to end of Line
-right = end
-# Switch to next application
-tab = A-tab
+          # meta_mac modifier layer; inherits from 'Ctrl' modifier layer
+          #
+          # The main part! Using this layer, we can remap our new "Cmd" key to
+          # do almost everything our muscle memory might need...
+          [meta_mac:C]
+          shift = layer(meta_mac_shift)
+          # Move cursor to beginning of line
+          left = home
+          # Move cursor to end of Line
+          right = end
+          # Switch to next application
+          tab = A-tab
 
-[meta_mac_shift:C-S]
-# Highlight to beginning of line
-left = S-home
-# Highlight to end of Line
-right = S-end
-# Cmd-Shift-Tab switches to the previous application
-tab = A-S-tab
+          [meta_mac_shift:C-S]
+          # Highlight to beginning of line
+          left = S-home
+          # Highlight to end of Line
+          right = S-end
+          # Cmd-Shift-Tab switches to the previous application
+          tab = A-S-tab
         '';
       };
     };

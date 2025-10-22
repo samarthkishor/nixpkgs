@@ -88,33 +88,53 @@ in
       #media-session.enable = true;
     };
 
-    # Keyboard customization: use some macOS shortcuts
-    # from https://github.com/canadaduane/meta-mac/blob/main/keyd/default.conf
+    # Configure keyboard
     services.keyd = {
       enable = true;
       keyboards = {
         default = {
-          ids = [ "*" ];
-          settings = {
-            main = {
-              # Create new "cmd" button
-              leftalt = "layer(meta_mac)";
-              # Swap meta/alt
-              leftmeta = "leftalt";
-            };
-            "meta_mac:C" = {
-              shift = "layer(meta_mac_shift)";
-              left = "home";
-              right = "end";
-            };
-            "meta_mac_shift:C-S" = {
-              left = "S-home";
-              right = "S-end";
-            };
-          };
+          ids = ["*"];
+          extraConfig = ''
+# Mac-Like Configuration Example
+# Based off https://github.com/rvaiya/keyd/blob/master/examples/macos.conf
+#
+# Uses "Alt" button to the left of spacebar as "Cmd" key
+#
+[ids]
+*
+
+[main]
+# Create a new "Cmd" button, with various Mac OS-like features below
+leftmeta = layer(meta_mac)
+
+# Swap ctrl/meta
+leftcontrol = leftmeta
+
+# meta_mac modifier layer; inherits from 'Ctrl' modifier layer
+#
+# The main part! Using this layer, we can remap our new "Cmd" key to
+# do almost everything our muscle memory might need...
+[meta_mac:C]
+shift = layer(meta_mac_shift)
+# Move cursor to beginning of line
+left = home
+# Move cursor to end of Line
+right = end
+# Switch to next application
+tab = A-tab
+
+[meta_mac_shift:C-S]
+# Highlight to beginning of line
+left = S-home
+# Highlight to end of Line
+right = S-end
+# Cmd-Shift-Tab switches to the previous application
+tab = A-S-tab
+          '';
         };
       };
     };
+
     # Optional, but makes sure that when you type the make palm rejection work with keyd
     # https://github.com/rvaiya/keyd/issues/723
     environment.etc."libinput/local-overrides.quirks".text = ''

@@ -77,6 +77,7 @@ in
   };
 
   fonts.packages = with pkgs; [
+    aporetic
     noto-fonts
     noto-fonts-cjk-serif
     fira-code

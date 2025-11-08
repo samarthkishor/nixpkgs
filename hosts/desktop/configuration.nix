@@ -18,6 +18,14 @@ in
     ./hardware-configuration.nix
   ];
 
+  nixpkgs.overlays = [
+    (import (
+      builtins.fetchTarball {
+        url = "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz";
+      }
+    ))
+  ];
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -83,7 +91,60 @@ in
   # Configure host-only packages
   users.users.samarth.packages = with pkgs; [
     # Since this is XFCE, we need the regular gtk version of emacs
-    emacs-gtk
+    (emacs.pkgs.withPackages (epkgs: with epkgs; [
+        use-package
+        dired-subtree
+	trashed
+	which-key
+	doom-modeline
+	magit
+	tempel
+	apheleia
+	nix-mode
+	markdown-mode
+	yaml-mode
+	json-mode
+	avy
+	consult
+	embark-consult
+	embark
+	vertico
+	# vertico-directory
+	marginalia
+	corfu
+	# corfu-popupinfo
+	corfu-terminal
+	cape
+	kind-icon
+	eat
+	orderless
+	nerd-icons
+	nerd-icons-completion
+	nerd-icons-corfu
+	nerd-icons-dired
+	wgrep
+	evil
+	jinx
+	olivetti
+        tree-sitter-langs
+        (treesit-grammars.with-grammars (grammars: [
+          grammars.tree-sitter-bash
+          grammars.tree-sitter-c
+          grammars.tree-sitter-go
+          grammars.tree-sitter-gomod
+          grammars.tree-sitter-java
+          grammars.tree-sitter-javascript
+          grammars.tree-sitter-json
+          grammars.tree-sitter-latex
+          grammars.tree-sitter-markdown
+          grammars.tree-sitter-markdown-inline
+          grammars.tree-sitter-nix
+          grammars.tree-sitter-ocaml
+          grammars.tree-sitter-ocaml-interface
+          grammars.tree-sitter-python
+        ]))
+      ]
+    ))
     # XFCE plugins
     xfce.xfce4-xkb-plugin
     xfce.xfce4-whiskermenu-plugin
